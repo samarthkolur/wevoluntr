@@ -7,7 +7,7 @@ COPY . .
 RUN npm run build
 
 # production image
-FROM node:18-bullseye AS runner
+FROM node:20-bullseye AS runner
 WORKDIR /app
 
 # if you use environment variables for Next.js, set them via docker run
