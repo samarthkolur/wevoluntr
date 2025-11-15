@@ -2,9 +2,9 @@ pipeline {
   agent any
 
   environment {
-    REGISTRY = "docker.io"
-    IMAGE_NAME = "samarthkolur/wevoluntr:test"    // change if needed
-    CREDENTIALS_ID = "docker-hub-creds"      // must match Jenkins credential ID
+    REGISTRY       = "docker.io"
+    IMAGE_NAME     = "samarthkolur/wevoluntr"   // no :tag here
+    CREDENTIALS_ID = "docker-hub-creds"        // must match Jenkins credential ID
   }
 
   stages {
@@ -16,8 +16,8 @@ pipeline {
       steps {
         script {
           // use short git SHA as the tag (stable + traceable)
-          TAG = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
-          env.IMG_TAG = TAG
+          def tag = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
+          env.IMG_TAG = tag
           echo "Using image tag: ${env.IMG_TAG}"
         }
       }
