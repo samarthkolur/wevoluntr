@@ -3,7 +3,7 @@ pipeline {
 
   environment {
     REGISTRY       = "docker.io"
-    IMAGE_NAME     = "samarthkolur/wevoluntr"   // no :tag here
+    IMAGE_NAME     = "samarthdkolur1/wevoluntr"   // no :tag here
     CREDENTIALS_ID = "docker-hub-creds"        // must match Jenkins credential ID
   }
 
