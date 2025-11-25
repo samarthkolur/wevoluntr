@@ -9,14 +9,22 @@ RUN npm ci
 # Copy source code
 COPY . .
 
+# --- IMPORTANT FIX ---
+# Add a dummy MONGODB_URI to avoid crash during "next build"
+ARG MONGODB_URI=dummy-build-uri
+ENV MONGODB_URI=$MONGODB_URI
+
 # Build Next.js app
 RUN npm run build
 
-# Production Runner — must also use Node 20+
+
+# -------------------------
+# Production runner
+# -------------------------
 FROM node:20-bullseye AS runner
 WORKDIR /app
 
-# Copy only required build artifacts
+# Copy build output
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package*.json ./
