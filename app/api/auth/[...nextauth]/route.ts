@@ -2,83 +2,40 @@ export const runtime = "nodejs";
 
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import { MongoDBAdapter } from "@auth/mongodb-adapter";
+import clientPromise from "@/lib/clientPromise";
 import { connectDB } from "@/lib/mongodb";
 import User, { IUser } from "@/models/User";
 
 export const authOptions: NextAuthOptions = {
-  debug: true,
+  adapter: MongoDBAdapter(clientPromise),
+  session: {
+    strategy: "database",
+  },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      allowDangerousEmailAccountLinking: true,
     }),
   ],
   callbacks: {
-    // ONE unified auth flow
-    async signIn({ user }) {
-      try {
-        await connectDB();
-
-        if (!user.email) {
-          console.error("❌ No email from Google");
-          return false; // only block in this rare case
-        }
-
-        const existingUser = (await User.findOne({
-          email: user.email,
-        })) as IUser | null;
-
-        // first time: create user, mark as NOT onboarded, send to onboarding
-        if (!existingUser) {
-          await User.create({
-            name: user.name,
-            email: user.email,
-            image: user.image,
-            provider: "google",
-            onboarded: false,
-          });
-
-          // 👇 redirect new user to onboarding page
-          return "/onboarding";
-        }
-
-        // user exists:
-        if (!existingUser.onboarded) {
-          // not finished onboarding yet → send to onboarding again
-          return "/onboarding";
-        }
-
-        // fully onboarded → allow normal redirect (e.g. dashboard)
-        return true;
-      } catch (error) {
-        console.error("❌ ERROR IN signIn callback:", error);
-        // If Mongo breaks, block sign in (you'll see AccessDenied)
-        return false;
+    async session({ session, user }) {
+      if (session.user) {
+        (session.user as any).id = user.id;
+        (session.user as any).role = (user as any).role;
+        (session.user as any).isProfileComplete = (user as any).isProfileComplete;
       }
+      return session;
     },
-
-    async session({ session }) {
-      try {
-        await connectDB();
-
-        if (!session.user?.email) return session;
-
-        const dbUser = (await User.findOne({
-          email: session.user.email,
-        })) as IUser | null;
-
-        if (dbUser) {
-          (session.user as any).id = dbUser._id.toString();
-          (session.user as any).onboarded = dbUser.onboarded;
-        }
-
-        return session;
-      } catch (err) {
-        console.error("❌ ERROR IN session callback:", err);
-        return session;
-      }
+    async signIn({ user, account, profile }) {
+      return true;
     },
   },
+  pages: {
+    signIn: '/auth/signin', // Optional: custom sign in page
+    // newUser: '/onboarding' // This can be used to redirect new users
+  }
 };
 
 const handler = NextAuth(authOptions);
