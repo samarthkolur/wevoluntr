@@ -12,8 +12,6 @@ export default function Page() {
     <div className=" m-4 md:m-10 px-4 py-12 flex flex-col md:flex-row items-center justify-between gap-10">
       {/* LEFT SIDE */}
 
-
-      
       <div className="flex-1 flex flex-col gap-5">
         <div className="flex flex-col border border-black rounded-2xl w-full max-w-sm">
           <InputGroup>
