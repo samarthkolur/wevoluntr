@@ -4,7 +4,7 @@ pipeline {
   environment {
     REGISTRY       = "docker.io"
     IMAGE_NAME     = "samarthdkolur1/wevoluntr"   // no :tag here
-    CREDENTIALS_ID = "docker-hub-creds"           // must match Jenkins credential ID
+    CREDENTIALS_ID = "docker-hub-creds"        // must match Jenkins credential ID
   }
 
   stages {
@@ -27,11 +27,7 @@ pipeline {
       steps {
         sh '''
           set -e
-          # pass a dummy MONGODB_URI so Next.js build doesn't crash
-          docker build \
-            --build-arg MONGODB_URI="build-placeholder-uri" \
-            -t ${REGISTRY}/${IMAGE_NAME}:${IMG_TAG} .
-          
+          docker build -t ${REGISTRY}/${IMAGE_NAME}:${IMG_TAG} .
           docker tag ${REGISTRY}/${IMAGE_NAME}:${IMG_TAG} ${REGISTRY}/${IMAGE_NAME}:latest
         '''
       }
@@ -53,24 +49,17 @@ pipeline {
 
     stage('Deploy on this host (restart container)') {
       steps {
-        // inject real MONGODB_URI from Jenkins credentials
-        withCredentials([string(credentialsId: 'mongodb-uri', variable: 'MONGODB_URI')]) {
-          sh '''
-            set -e
-            CONTAINER_NAME="wevoluntr-app"
-            IMAGE="${REGISTRY}/${IMAGE_NAME}:${IMG_TAG}"
+        sh '''
+          set -e
+          CONTAINER_NAME="wevoluntr-app"
+          IMAGE="${REGISTRY}/${IMAGE_NAME}:${IMG_TAG}"
 
-            # stop & remove existing container (ignore errors)
-            docker rm -f ${CONTAINER_NAME} || true
+          # stop & remove existing container (ignore errors)
+          docker rm -f ${CONTAINER_NAME} || true
 
-            # run new container (host 80 -> container 3000) with real MONGODB_URI
-            docker run -d --name ${CONTAINER_NAME} \
-              -p 80:3000 \
-              --restart unless-stopped \
-              -e MONGODB_URI="$MONGODB_URI" \
-              ${IMAGE}
-          '''
-        }
+          # run new container (map host port 80 -> container 3000)
+          docker run -d --name ${CONTAINER_NAME} -p 80:3000 --restart unless-stopped ${IMAGE}
+        '''
       }
     }
   }
