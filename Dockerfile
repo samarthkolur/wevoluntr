@@ -10,9 +10,10 @@ RUN npm ci
 COPY . .
 
 # --- IMPORTANT FIX ---
-# Add a dummy MONGODB_URI to avoid crash during "next build"
-ARG MONGODB_URI=dummy-build-uri
-ENV MONGODB_URI=$MONGODB_URI
+# Use a syntactically valid dummy Mongo URI for build
+# (real URI will be injected at runtime from Jenkins)
+ARG MONGODB_URI="mongodb://localhost:27017/dummy"
+ENV MONGODB_URI=${MONGODB_URI}
 
 # Build Next.js app
 RUN npm run build
