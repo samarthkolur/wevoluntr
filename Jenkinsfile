@@ -7,10 +7,10 @@ pipeline {
     CREDENTIALS_ID = "docker-hub-creds"           // Docker Hub creds
 
     // IDs of Jenkins credentials for app env vars
-    MONGO_CRED_ID           = "mongodb-uri"
-    NEXTAUTH_SECRET_CRED_ID = "nextauth-secret"
-    GOOGLE_ID_CRED_ID       = "google-client-id"
-    GOOGLE_SECRET_CRED_ID   = "google-client-secret"
+    MONGO_CRED_ID           = "MONGODB_URI"
+    NEXTAUTH_SECRET_CRED_ID = "NEXTAUTH_SECRET"
+    GOOGLE_ID_CRED_ID       = "GOOGLE_CLIENT_ID"
+    GOOGLE_SECRET_CRED_ID   = "GOOGLE_CLIENT_SECRET"
   }
 
   stages {
