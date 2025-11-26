@@ -11,6 +11,7 @@ pipeline {
     NEXTAUTH_SECRET_CRED_ID = "NEXTAUTH_SECRET"
     GOOGLE_ID_CRED_ID       = "GOOGLE_CLIENT_ID"
     GOOGLE_SECRET_CRED_ID   = "GOOGLE_CLIENT_SECRET"
+    NEXTAUTH_URL_CRED_ID    = "NEXTAUTH_URL"
   }
 
   stages {
@@ -64,7 +65,8 @@ pipeline {
           string(credentialsId: "${MONGO_CRED_ID}",           variable: 'MONGODB_URI'),
           string(credentialsId: "${NEXTAUTH_SECRET_CRED_ID}", variable: 'NEXTAUTH_SECRET'),
           string(credentialsId: "${GOOGLE_ID_CRED_ID}",       variable: 'GOOGLE_CLIENT_ID'),
-          string(credentialsId: "${GOOGLE_SECRET_CRED_ID}",   variable: 'GOOGLE_CLIENT_SECRET')
+          string(credentialsId: "${GOOGLE_SECRET_CRED_ID}",   variable: 'GOOGLE_CLIENT_SECRET'),
+          string(credentialsId: "${NEXTAUTH_URL_CRED_ID}",    variable: 'NEXTAUTH_URL')
         ]) {
           sh '''
             set -e
@@ -82,6 +84,7 @@ pipeline {
               -e NEXTAUTH_SECRET="$NEXTAUTH_SECRET" \
               -e GOOGLE_CLIENT_ID="$GOOGLE_CLIENT_ID" \
               -e GOOGLE_CLIENT_SECRET="$GOOGLE_CLIENT_SECRET" \
+              -e NEXTAUTH_URL="$NEXTAUTH_URL" \
               ${IMAGE}
           '''
         }
