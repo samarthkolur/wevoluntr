@@ -33,7 +33,7 @@ export const authOptions: NextAuthOptions = {
     },
   },
   pages: {
-    signIn: '/auth/signin', // Optional: custom sign in page
+    signIn: '/login', // Optional: custom sign in page
     // newUser: '/onboarding' // This can be used to redirect new users
   }
 };

@@ -171,6 +171,10 @@ function VolunteerFlow({ updateSession }: { updateSession: (data?: any) => Promi
     ),
   ];
 
+  const isNextDisabled = 
+    (step === 0 && (!formData.legalName || !formData.phone || !formData.dob)) ||
+    (step === 1 && (!formData.location || !formData.maxDistanceKm));
+
   return (
     <StepContainer
       title="Volunteer Onboarding"
@@ -179,6 +183,7 @@ function VolunteerFlow({ updateSession }: { updateSession: (data?: any) => Promi
       onNext={step === steps.length - 1 ? handleSubmit : nextStep}
       onPrev={prevStep}
       loading={loading}
+      disableNext={isNextDisabled}
     >
       {steps[step]}
     </StepContainer>
@@ -305,6 +310,11 @@ function NGOFlow({ updateSession }: { updateSession: (data?: any) => Promise<any
     ),
   ];
 
+  const isNextDisabled = 
+    (step === 0 && (!formData.ngoName || !formData.description || !formData.logoUrl)) || 
+    (step === 1 && (!formData.registrationNumber || !formData.panId || !formData.regDocsUrl)) || 
+    (step === 2 && (!formData.contactName || !formData.contactDesignation));
+
   return (
     <StepContainer
       title="NGO Onboarding"
@@ -313,7 +323,7 @@ function NGOFlow({ updateSession }: { updateSession: (data?: any) => Promise<any
       onNext={step === steps.length - 1 ? handleSubmit : nextStep}
       onPrev={prevStep}
       loading={loading}
-      formData={formData}
+      disableNext={isNextDisabled}
     >
       {steps[step]}
     </StepContainer>
@@ -330,7 +340,7 @@ function StepContainer({
   onNext,
   onPrev,
   loading,
-  formData,
+  disableNext,
 }: {
   title: string;
   step: number;
@@ -339,7 +349,7 @@ function StepContainer({
   onNext: () => void;
   onPrev: () => void;
   loading: boolean;
-  formData?: any;
+  disableNext?: boolean;
 }) {
   const progress = ((step + 1) / totalSteps) * 100;
 
@@ -376,7 +386,7 @@ function StepContainer({
           </Button>
           <Button 
             onClick={onNext} 
-            disabled={loading || (step === 0 && (!formData.ngoName || !formData.description || !formData.logoUrl)) || (step === 1 && (!formData.registrationNumber || !formData.panId || !formData.regDocsUrl)) || (step === 2 && (!formData.contactName || !formData.contactDesignation))} 
+            disabled={loading || disableNext} 
             className="bg-black text-white hover:bg-gray-800 border-2 border-black shadow-[4px_4px_0px_0px_rgba(163,230,53,1)] hover:shadow-[2px_2px_0px_0px_rgba(163,230,53,1)] hover:translate-y-[2px] hover:translate-x-[2px] transition-all font-bold"
           >
             {loading ? "Submitting..." : step === totalSteps - 1 ? "Finish" : "Next"}
