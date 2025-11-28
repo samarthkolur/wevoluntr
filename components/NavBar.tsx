@@ -30,7 +30,7 @@ export function NavBar() {
       <div className="flex justify-between items-center w-full md:w-auto">
         <Link href="/">
           <h1 className="text-3xl p-2 font-black tracking-tighter italic cursor-pointer">
-            Voluntr<span className="text-lime-500">.</span>DEMO
+            Voluntr<span className="text-lime-500">.</span>
           </h1>
         </Link>
         <button className="md:hidden p-2" onClick={toggleMenu}>
