@@ -26,7 +26,7 @@ export function NavBar() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row bg-white p-4 m-4 md:m-10 rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] justify-between items-center relative z-50">
+    <div className="flex flex-col md:flex-row bg-white p-4 m-4 md:m-10 rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] justify-between items-center relative z-[100]">
       <div className="flex justify-between items-center w-full md:w-auto">
         <Link href="/">
           <h1 className="text-3xl p-2 font-black tracking-tighter italic cursor-pointer">
@@ -43,18 +43,22 @@ export function NavBar() {
           isMenuOpen ? "flex" : "hidden"
         } md:flex flex-col md:flex-row items-center gap-6 text-black font-bold w-full md:w-auto mt-4 md:mt-0`}
       >
-        <Button
-          variant="ghost"
-          className="text-lg hover:bg-lime-100 hover:text-black transition-colors"
-        >
-          NGOs
-        </Button>
-        <Button
-          variant="ghost"
-          className="text-lg hover:bg-lime-100 hover:text-black transition-colors"
-        >
-          EVENTS
-        </Button>
+        <Link href="/discover?cause=ngo" passHref>
+            <Button
+              variant="ghost"
+              className="text-lg hover:bg-lime-100 hover:text-black transition-colors"
+            >
+              NGOs
+            </Button>
+        </Link>
+        <Link href="/discover" passHref>
+            <Button
+              variant="ghost"
+              className="text-lg hover:bg-lime-100 hover:text-black transition-colors"
+            >
+              EVENTS
+            </Button>
+        </Link>
 
         <div className="flex flex-col md:flex-row items-center gap-4 p-2 w-full md:w-auto relative">
           {session ? (

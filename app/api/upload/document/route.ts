@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { writeFile, mkdir } from "fs/promises";
+import path from "path";
 
 export async function POST(req: Request) {
     try {
@@ -9,11 +11,21 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
         }
 
-        // Mock upload process
-        // In a real app, upload to S3/Cloudinary here
-        const mockUrl = `https://voluntr.com/files/${file.name}-${Date.now()}`;
+        const buffer = Buffer.from(await file.arrayBuffer());
+        const filename = `${Date.now()}-${file.name.replace(/\s/g, '-')}`;
+        const uploadDir = path.join(process.cwd(), "public/uploads");
 
-        return NextResponse.json({ url: mockUrl });
+        try {
+            await mkdir(uploadDir, { recursive: true });
+        } catch (e) {
+            // Ignore if exists
+        }
+
+        await writeFile(path.join(uploadDir, filename), buffer);
+
+        const url = `/uploads/${filename}`;
+
+        return NextResponse.json({ url });
     } catch (error) {
         console.error("Upload error:", error);
         return NextResponse.json({ error: "Upload failed" }, { status: 500 });
