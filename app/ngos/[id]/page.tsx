@@ -7,6 +7,8 @@ import { ArrowLeft, Building2, Globe, FileText, BadgeCheck, Mail, Calendar } fro
 import { EventCard } from "@/components/EventCard";
 import { notFound } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 async function getNgoData(id: string) {
   await connectDB();
   

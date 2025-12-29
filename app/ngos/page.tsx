@@ -5,6 +5,8 @@ import Link from "next/link";
 import { ArrowLeft, Building2 } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 
+export const dynamic = "force-dynamic";
+
 async function getNgos() {
   await connectDB();
   const ngos = await Ngo.find({ verificationStatus: "verified" }).lean();

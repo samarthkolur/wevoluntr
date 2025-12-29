@@ -11,6 +11,8 @@ import Ngo from "@/models/Ngo";
 import { EventCard } from "@/components/EventCard";
 import { ArrowRight, Globe, Heart, Users } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 async function getData() {
   await connectDB();
 
