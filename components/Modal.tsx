@@ -34,7 +34,7 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
   if (!isOpen) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
       <div
         ref={modalRef}
         className="relative w-full max-w-2xl bg-white rounded-xl shadow-2xl border-2 border-black animate-in fade-in zoom-in-95 duration-200"

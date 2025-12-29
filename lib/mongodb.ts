@@ -21,11 +21,11 @@ export async function connectDB() {
     cached.promise = mongoose
       .connect(MONGODB_URI)
       .then((mongooseInstance) => {
-        console.log("✅ MongoDB connected");
+        console.log(" MongoDB connected");
         return mongooseInstance;
       })
       .catch((err) => {
-        console.error("❌ MongoDB connection error:", err);
+        console.error(" MongoDB connection error:", err);
         throw err;
       });
   }
