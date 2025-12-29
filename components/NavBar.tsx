@@ -43,7 +43,7 @@ export function NavBar() {
           isMenuOpen ? "flex" : "hidden"
         } md:flex flex-col md:flex-row items-center gap-6 text-black font-bold w-full md:w-auto mt-4 md:mt-0`}
       >
-        <Link href="/discover?cause=ngo" passHref>
+        <Link href="/ngos" passHref>
             <Button
               variant="ghost"
               className="text-lg hover:bg-lime-100 hover:text-black transition-colors"
