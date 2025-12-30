@@ -70,7 +70,7 @@ export default async function Home() {
           </div>
 
           <h1 className="text-6xl md:text-8xl font-black text-black tracking-tighter leading-none">
-            Make a <br />
+            nak a <br />
             Difference with <br />
             <span className="text-lime-500 inline-block transform -rotate-1 underline decoration-black underline-offset-8 decoration-4">
               Voluntr.
